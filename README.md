@@ -1,7 +1,7 @@
 # CXJSTerm
 A p5.js based terminal enviornment tailored for JavaScript development on a basic level, with built-in commands to navigate the system. 
 
-Global Variables: 
+Global Variables: <br>
 var _X_GCURPREF = "$ "; //Cursor prefix
 var _X_GCURTEXT = "[]"; //Cursor text
 var _X_GINPTB = ""; //Input buffer
