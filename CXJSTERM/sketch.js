@@ -2,39 +2,45 @@ var _X_GCURPREF = "$ ";
 var _X_GCURTEXT = "[]";
 var _X_GINPTB = "";
 var _X_GMRSUB = "";
-var _X_GOLDTEXT = "Before changing window size with Ctrl+ScrollWheel, make sure to temporarily disable text \nscrolling with either ScrollLock, or \n:_X_GSCROLLCONTROL=false; / :_X_GSCROLLCONTROL=true;\nType \"update-log\" to read what\'s changed in the newest updates. \n";
+var _X_GOLDTEXT = "";
+var _X_GOLDTEXTPRE = "firstrun. Set by setup(); upon end_preprompt, autoexec will run. \npreprompt mode, commands available alongside standard/alias commands: \nappend_autoexec\nset_autoexec\nlist_autoexec\nmode_fr_s_on\nmode_fr_s_off\nbackup_autoexec\nrestore_autoexec\nlist_backup_autoexec\nman_ccl_autoexec\nman_ccl_autoexec_backup\ngenerate_save_ccl\nend_preprompt\n\nNOTE: any autoexec/autoexec backup will be erased on reset of program, \na backup can be made, and copied to the clipboard with man_ccl_autoexec, \nman_ccl_autoexec_backup, and generate_save_ccl\n";
+var _X_GOLDTEXTAPRE = "Before changing window size with Ctrl+ScrollWheel, make sure to temporarily disable text \nscrolling with either ScrollLock, or \n:_X_GSCROLLCONTROL=false; / :_X_GSCROLLCONTROL=true;\nType \"update-log\" to read what\'s changed in the newest updates. \n";
 var _X_GTEXTBUFFER = "";
 var _X_GTEXTCOLOUR = [0, 255, 45];
 var _X_GTEXTSIZE = 16;
-var _X_GBACKGRNDCOLOUR = [20, 20, 35];
+var _X_GBACKGRNDCOLOUR = [0, 0, 5];
 var _X_GTEXTOFFSETX = 0;
 var _X_GTEXTOFFSETY = 0;
 var _X_GAUTORESZ = true;
 var _X_GAKEYDOWN = false;
 var _X_GMOUSEDOWN = false;
-var _X_GPROGAUTH = "_X_MAIN";
+var _X_GPROGAUTH = "";
 var _X_GCONTROLKEY = false;
 var _X_GCONTROLKEYDOWN = "";
 var _X_GUSEDCTRLKEY = "`";
 //var _X_GSHIFTDOWN = false;
-var _X_GHELPTEXT = "Global Help Text -- Not Yet Fully Implemented\n";
+var _X_GHELPTEXT = "Global Help Text -- Not Yet Fully Implemented, use help-builtin\n";
 var _X_GWIDTH = 640;
 var _X_GHEIGHT = 480;
 var _X_GTARGETFPS = 60;
-var _X_GLOBALVARS = [["test",90132],["sys-info","Virtual Terminal (CXJSTERM) running in JavaScript with p5.js, \nOriginal screen start setting: " + _X_GWIDTH + "x" + _X_GHEIGHT + "@TargetFPS" + _X_GTARGETFPS],["update-log","What\'s new -- update 1-22-2022: \n  -Auto-resize window is enabled at start. \n  -Default Text and Background colors changed. \n  -Built-in aliases added: paste, paget, copymrh, copyold\n  -Fixed problems with command input. "]];
-var _X_GALIASES = [["test", "var", ":alert(\"received \" + \"%var%\");"],["test2",":console.log(\"test\")"],["paste",":_X_GINPTB=prompt(\"Put in input line: \")"],["paget","url",":fetch('%url%') .then(response => response.text()) .then((data) => {_X_APIRUNCMD(data)})"],["copymrh",":_X_Fcstc(_X_GHISTORY[_X_GHISTORY.length-1]);"],["copyold",":_X_Fcstc(_X_GOLDTEXT);"]];
+var _X_GLOBALVARS = [["test",90132],["sys-info","Virtual Terminal (CXJSTERM) running in JavaScript with p5.js, \nOriginal screen start setting: " + _X_GWIDTH + "x" + _X_GHEIGHT + "@TargetFPS" + _X_GTARGETFPS],["update-log","What\'s new -- updates 1-22-2022 & 1-30-2022: \n  -Auto-resize window is enabled at start. \n  -Default Text and Background colors changed. \n  -Built-in aliases added: paste, paget, copymrh, copyold\n  -Fixed problems with command input. \n\n  -Added PrePrompt Mode, used for inputting, changing, and saving autoexec procedures. \n  -Changed colour and text schemes. "],["_X_GAUTOEXEC",":console.log(\'empty\');"]];
+var _X_GALIASES = [["test", "var", ":alert(\"received \" + \"%var%\");"],["test2",":console.log(\"test\")"],["paste",":_X_GINPTB=prompt(\"Put in input line: \")"],["paget","url",":fetch('%url%') .then(response => response.text()) .then((data) => {_X_APIRUNCMD(data)})"],["pagetjs","url",":fetch('%url%') .then(response => response.text()) .then((data) => {_X_APIRUNJSCMD(data)})"],["copymrh",":_X_Fcstc(_X_GHISTORY[_X_GHISTORY.length-1]);"],["copyold",":_X_Fcstc(_X_GOLDTEXT);"]];
 var _X_GSCROLLCONTROL = true;
 var _X_GSCROLLDIR = [0,-1];
 var _X_GSAVEDINPTAL = [];
 var _X_GRESOFFSONCLR = true;
 var _X_GHISTORY = [];
 var _X_GHISTORYSCR = 0;
+var _X_GAEB = "";
+var _X_GPAR = "_X_MAIN";
 
 function setup() {
   // put setup code here
   createCanvas(_X_GWIDTH,_X_GHEIGHT);
   _X_FAUTOALIGN();
   frameRate(_X_GTARGETFPS);
+  _X_GPROGAUTH = "_X_PREPROMPT FIRSTRUN";
+  _X_GOLDTEXT+=_X_GOLDTEXTPRE;
 }
 
 function mouseWheel(event){
@@ -90,13 +96,79 @@ function draw() {
 	  if(_X_GHEIGHT != window.innerHeight || _X_GWIDTH != window.innerWidth){
 		  _X_TWINDCH = true;
 	  }
-	  _X_GHEIGHT = _X_FGS(window.innerHeight-5);
-	  _X_GWIDTH = _X_FGS(window.innerWidth-5);
+	  _X_GHEIGHT = _X_FGS(window.innerHeight-4);
+	  _X_GWIDTH = _X_FGS(window.innerWidth);
   }
   if(_X_TWINDCH){
 	  resizeCanvas(_X_GWIDTH,_X_GHEIGHT);
   }
   background(_X_GBACKGRNDCOLOUR);
+  if(_X_GPROGAUTH === "_X_PREPROMPT" || _X_GPROGAUTH === "_X_PREPROMPT FIRSTRUN"){
+	  if(_X_GCONTROLKEY && _X_GCONTROLKEYDOWN === "^D"){
+		  _X_GOLDTEXT = _X_GOLDTEXT + "" + _X_GINPTB;
+		  _X_GCONTROLKEY = false;
+		  _X_GMRSUB = _X_GINPTB;
+		  _X_GINPTB = "";
+		  _X_GHISTORY.push(_X_GMRSUB.substr(0,_X_GMRSUB.length-1));
+		  _X_GHISTORYSCR = 0;
+		  var _X_TMRSUBL = _X_APItolist(_X_GMRSUB);
+		  if(_X_TMRSUBL[0] === "append_autoexec"){
+			  var _X_T = _X_APIGETV("_X_GAUTOEXEC");
+			  _X_T+=prompt("append_autoexec");
+			  _X_APISTOREV("_X_GAUTOEXEC",_X_T);
+		  }else if(_X_TMRSUBL[0] === "set_autoexec"){
+			  var _X_T = _X_APIGETV("_X_GAUTOEXEC");
+			  _X_T=prompt("set_autoexec");
+			  _X_APISTOREV("_X_GAUTOEXEC",_X_T);
+		  }else if(_X_TMRSUBL[0] === "list_autoexec"){
+			  var _X_T = _X_APIGETV("_X_GAUTOEXEC");
+			  _X_GOLDTEXT+=_X_T+"\n";
+		  }else if(_X_TMRSUBL[0] === "mod_fr_s_on"){
+			  _X_GPROGAUTH = "_X_PREPROMPT FIRSTRUN";
+		  }else if(_X_TMRSUBL[0] === "mod_fr_s_off"){
+			  _X_GPROGAUTH = "_X_PREPROMPT";
+		  }else if(_X_TMRSUBL[0] === "backup_autoexec"){
+			  _X_GAEB = _X_APIGETV("_X_GAUTOEXEC");
+		  }else if(_X_TMRSUBL[0] === "restore_autoexec"){
+			  _X_APISTOREV("_X_GAUTOEXEC",_X_GAEB);
+		  }else if(_X_TMRSUBL[0] === "list_backup_autoexec"){
+			  _X_GOLDTEXT+=_X_GAEB+"\n";
+		  }else if(_X_TMRSUBL[0] === "man_ccl_autoexec"){
+			  _X_Fcstc(_X_APIGETV("_X_GAUTOEXEC"));
+		  }else if(_X_TMRSUBL[0] === "man_ccl_autoexec_backup"){
+			  _X_Fcstc(_X_GAEB);
+		  }else if(_X_TMRSUBL[0] === "generate_save_ccl"){
+			  //'The Clipboard API is not available.'
+			  //To restore this autoexec file, enter PREPROMPT MODE and enter the command 'set_autoexec', then paste this string. 
+			  if(_X_Fcstc(_X_APIGETV("_X_GAUTOEXEC")) != 'The Clipboard API is not available.'){
+				  _X_GOLDTEXT+="To restore this autoexec file, enter PREPROMPT MODE and enter the command 'set_autoexec', then paste this string. \n"+_X_APIGETV("_X_GAUTOEXEC");
+			  }else{
+				  _X_GOLDTEXT+="The Clipboard API is not available.";
+			  }
+		  }else if(_X_TMRSUBL[0] === "end_preprompt"){
+			  if(_X_GPROGAUTH === "_X_PREPROMPT FIRSTRUN"){
+				  _X_GOLDTEXT+=_X_GOLDTEXTAPRE;
+				  _X_APIRUNCMD(_X_APIGETV("_X_GAUTOEXEC"));
+			  }
+			  _X_GPROGAUTH = _X_GPAR;
+		  }else{
+			  _X_APIRUNCMD(_X_GMRSUB);
+		  }
+	  }
+	  
+	  if(_X_GCONTROLKEY && _X_GCONTROLKEYDOWN === "^b"){
+		  _X_GCONTROLKEY = false;
+		  _X_GINPTB = _X_GINPTB.substr(0,_X_GINPTB.length-1);
+	  }
+	  
+	  if(_X_GCONTROLKEY && _X_GCONTROLKEYDOWN === "ScrollLock"){
+		  _X_GCONTROLKEY = false;
+		  _X_GSCROLLCONTROL = !_X_GSCROLLCONTROL;
+	  }
+	  
+	  _X_GTEXTBUFFER = _X_GOLDTEXT + "" + _X_GINPTB + "[]";
+	  _X_APIRENDERTEXT();
+  }else
   if(_X_GPROGAUTH === "_X_MAIN"){
 	  
 	  if(_X_GCONTROLKEY && _X_GCONTROLKEYDOWN === "^D"){
